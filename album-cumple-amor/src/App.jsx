@@ -88,54 +88,42 @@ const CuadroGaleria = ({ titulo, nota, index, carpeta, onZoom }) => {
 const MoonCollage = ({ fotos }) => {
   if (!fotos || fotos.length === 0) return null;
 
-  // Mapa EXTREMADAMENTE PRECISO basado en la imagen de referencia (7 columnas x 10 filas)
-const moonLayout = [
-  // Punta superior
-  { c: 6, r: 1, cs: 1, rs: 1 }, // Cuadro pequeño superior
-  { c: 4, r: 2, cs: 2, rs: 2 }, // Cuadro grande oscuro superior
-  
-  // Curva superior e interior
-  { c: 2, r: 3, cs: 2, rs: 2 }, // Cuadro grande claro (izq)
-  { c: 4, r: 4, cs: 2, rs: 2 }, // Cuadro grande claro (der, bajo el oscuro)
-  { c: 3, r: 5, cs: 1, rs: 1 }, // Conector pequeño
-  
-  // Vientre (la parte más gruesa a la izquierda)
-  { c: 1, r: 5, cs: 2, rs: 2 }, // Cuadro grande oscuro (el más a la izquierda)
-  { c: 3, r: 6, cs: 2, rs: 2 }, // Cuadro grande oscuro central
-  { c: 6, r: 6, cs: 1, rs: 1 }, // Cuadro pequeño flotante interno
-  
-  // Curva inferior
-  { c: 4, r: 8, cs: 1, rs: 1 }, // Conector pequeño
-  { c: 2, r: 8, cs: 2, rs: 2 }, // Cuadro grande oscuro inferior-izq
-  
-  // Base de la luna
-  { c: 6, r: 9, cs: 1, rs: 1 }, // Conector pequeño
-  { c: 4, r: 9, cs: 2, rs: 2 }, // Cuadro grande claro inferior
-  { c: 3, r: 10, cs: 1, rs: 1 }, // Conector pequeño
-  { c: 6, r: 10, cs: 2, rs: 2 }, // Cuadro grande oscuro inferior-der
-  { c: 8, r: 11, cs: 1, rs: 1 }  // Cuadro pequeño de la punta inferior
-];
+  // Mapa exacto sin superposiciones (13 piezas en grid de 8x9)
+  const moonLayout = [
+    { c: 4, r: 1, cs: 1, rs: 1 }, 
+    { c: 3, r: 2, cs: 2, rs: 2 }, 
+    { c: 1, r: 4, cs: 2, rs: 2 }, 
+    { c: 3, r: 4, cs: 2, rs: 2 }, 
+    { c: 5, r: 5, cs: 1, rs: 1 }, 
+    { c: 1, r: 6, cs: 2, rs: 2 }, 
+    { c: 3, r: 6, cs: 2, rs: 2 }, 
+    { c: 5, r: 6, cs: 2, rs: 2 }, 
+    { c: 2, r: 8, cs: 1, rs: 1 }, 
+    { c: 3, r: 8, cs: 2, rs: 2 }, 
+    { c: 5, r: 8, cs: 2, rs: 2 }, 
+    { c: 7, r: 8, cs: 2, rs: 2 }, 
+    { c: 8, r: 7, cs: 1, rs: 1 }  
+  ];
 
   return (
     <section className="mt-32 pt-20 border-t border-pink-100 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 relative overflow-hidden">
       
       {/* Contenedor de la luna */}
       <div className="relative">
-        {/* Estrellas decorativas mapeadas a la referencia */}
         <Star className="absolute -top-6 -left-6 text-yellow-400 animate-pulse" size={24} fill="currentColor" />
         <Star className="absolute -top-2 -right-8 text-yellow-400 animate-pulse" style={{ animationDelay: '0.7s' }} size={28} fill="currentColor" />
         <Star className="absolute bottom-16 -left-10 text-yellow-400 animate-pulse" style={{ animationDelay: '1.2s' }} size={22} fill="currentColor" />
         <Star className="absolute bottom-10 -right-6 text-yellow-400 animate-pulse" style={{ animationDelay: '0.4s' }} size={26} fill="currentColor" />
         
-        {/* EL TRUCO: aspect-ratio bloqueado para que sean CUADRADOS PERFECTOS */}
-              <div 
-  className="grid gap-1 w-[280px] md:w-[340px]" 
-  style={{ 
-    gridTemplateColumns: 'repeat(8, 1fr)', 
-    gridTemplateRows: 'repeat(11, 1fr)',
-    aspectRatio: '8 / 11' // Mantiene los cuadrados perfectos
-  }}
->
+        {/* Aspect-ratio actualizado a 8/9 y gridTemplateRows a 9 */}
+        <div 
+          className="grid gap-1 w-[280px] md:w-[340px]" 
+          style={{ 
+            gridTemplateColumns: 'repeat(8, 1fr)', 
+            gridTemplateRows: 'repeat(9, 1fr)',
+            aspectRatio: '8 / 9' 
+          }}
+        >
           {moonLayout.map((block, i) => (
             <div 
               key={i} 
