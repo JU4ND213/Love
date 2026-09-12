@@ -148,8 +148,8 @@ export default function App() {
 
   const cuadrosInfo = [
     { id: 1, titulo: 'Nuestros Inicios', nota: 'Como empezó esta hermosa historia...', carpeta: 'cuadro1' },
-    { id: 2, titulo: 'Nuestras Saliditas', nota: 'Conociendo y reconociendo nuevos lugares', carpeta: 'cuadro2' },
-    { id: 3, titulo: 'Momentos Divertidos', nota: 'Risas que me dan vida y días perfectos.', carpeta: 'cuadro3' },
+    { id: 2, titulo: 'Nuestras Saliditas', nota: 'Conociendo nuevos lugares...', carpeta: 'cuadro2' },
+    { id: 3, titulo: 'Momentos Divertidos', nota: 'Risas que me dan vida y días perfectos...', carpeta: 'cuadro3' },
   ];
 
   useEffect(() => {
