@@ -84,63 +84,51 @@ const CuadroGaleria = ({ titulo, nota, index, carpeta, onZoom }) => {
   );
 };
 
-// Contraportada: collage de fotos en forma de luna
+// Contraportada: Pizarra interactiva para armar la luna manualmente
 const MoonCollage = ({ fotos }) => {
   if (!fotos || fotos.length === 0) return null;
 
-  // Mapa exacto sin superposiciones (13 piezas en grid de 8x9)
-  const moonLayout = [
-    { c: 4, r: 1, cs: 1, rs: 1 }, 
-    { c: 3, r: 2, cs: 2, rs: 2 }, 
-    { c: 1, r: 4, cs: 2, rs: 2 }, 
-    { c: 3, r: 4, cs: 2, rs: 2 }, 
-    { c: 5, r: 5, cs: 1, rs: 1 }, 
-    { c: 1, r: 6, cs: 2, rs: 2 }, 
-    { c: 3, r: 6, cs: 2, rs: 2 }, 
-    { c: 5, r: 6, cs: 2, rs: 2 }, 
-    { c: 2, r: 8, cs: 1, rs: 1 }, 
-    { c: 3, r: 8, cs: 2, rs: 2 }, 
-    { c: 5, r: 8, cs: 2, rs: 2 }, 
-    { c: 7, r: 8, cs: 2, rs: 2 }, 
-    { c: 8, r: 7, cs: 1, rs: 1 }  
-  ];
-
   return (
-    <section className="mt-32 pt-20 border-t border-pink-100 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 relative overflow-hidden">
+    <section className="mt-32 pt-20 border-t border-pink-100 flex flex-col items-center justify-center relative overflow-hidden">
       
-      {/* Contenedor de la luna */}
-      <div className="relative">
-        <Star className="absolute -top-6 -left-6 text-yellow-400 animate-pulse" size={24} fill="currentColor" />
-        <Star className="absolute -top-2 -right-8 text-yellow-400 animate-pulse" style={{ animationDelay: '0.7s' }} size={28} fill="currentColor" />
-        <Star className="absolute bottom-16 -left-10 text-yellow-400 animate-pulse" style={{ animationDelay: '1.2s' }} size={22} fill="currentColor" />
-        <Star className="absolute bottom-10 -right-6 text-yellow-400 animate-pulse" style={{ animationDelay: '0.4s' }} size={26} fill="currentColor" />
+      <div className="text-center mb-8">
+        <h3 className="text-2xl md:text-3xl font-bold text-gray-700 mb-2">¡Collage para hacer figuritas!</h3>
+        <p className="text-gray-500 italic text-sm">Arrastra las fotos libremente por la pizarra para darle forma a lo que más te guste mi amor.</p>
+      </div>
+
+      {/* Pizarra / Canvas */}
+      <div className="relative w-full max-w-4xl h-[600px] bg-white border-2 border-dashed border-pink-200 rounded-3xl shadow-inner overflow-hidden">
         
-        {/* Aspect-ratio actualizado a 8/9 y gridTemplateRows a 9 */}
-        <div 
-          className="grid gap-1 w-[280px] md:w-[340px]" 
-          style={{ 
-            gridTemplateColumns: 'repeat(8, 1fr)', 
-            gridTemplateRows: 'repeat(9, 1fr)',
-            aspectRatio: '8 / 9' 
-          }}
-        >
-          {moonLayout.map((block, i) => (
-            <div 
-              key={i} 
-              className="bg-pink-100 overflow-hidden shadow-sm"
-              style={{ 
-                gridColumn: `${block.c} / span ${block.cs}`, 
-                gridRow: `${block.r} / span ${block.rs}` 
-              }}
+        <Star className="absolute top-6 left-6 text-yellow-400 animate-pulse" size={24} fill="currentColor" />
+        <Star className="absolute top-12 right-12 text-yellow-400 animate-pulse" style={{ animationDelay: '0.7s' }} size={28} fill="currentColor" />
+        <Star className="absolute bottom-16 left-10 text-yellow-400 animate-pulse" style={{ animationDelay: '1.2s' }} size={22} fill="currentColor" />
+        
+        {/* Renderizamos las fotos como elementos arrastrables */}
+        {fotos.map((foto, i) => {
+          // Posiciones iniciales aleatorias al lado izquierdo para que ella las acomode
+          const randomX = Math.floor(Math.random() * 100) + 20; 
+          const randomY = Math.floor(Math.random() * 400) + 20;
+          const randomRotate = Math.floor(Math.random() * 20) - 10;
+
+          return (
+            <motion.div 
+              key={i}
+              drag // ¡Esta es la magia! Hace que el elemento se pueda arrastrar
+              dragMomentum={false} // Evita que la foto salga "volando" al soltarla
+              whileDrag={{ scale: 1.1, zIndex: 50 }} // Se hace más grande al agarrarla
+              initial={{ x: randomX, y: randomY, rotate: randomRotate }}
+              className="absolute w-24 h-24 md:w-32 md:h-32 bg-white p-2 pb-6 shadow-md rounded-sm cursor-grab active:cursor-grabbing"
+              style={{ touchAction: 'none' }} // Importante para que funcione bien en celulares
             >
               <img 
-                src={fotos[i % fotos.length]} 
-                alt="Fragmento de la luna" 
-                className="w-full h-full object-cover"
+                src={foto} 
+                alt="Fragmento" 
+                // pointer-events-none es crucial para que el navegador no intente descargar la imagen al arrastrarla
+                className="w-full h-full object-cover pointer-events-none" 
               />
-            </div>
-          ))}
-        </div>
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );
