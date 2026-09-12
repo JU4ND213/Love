@@ -90,20 +90,30 @@ const MoonCollage = ({ fotos }) => {
 
   // Mapa EXTREMADAMENTE PRECISO basado en la imagen de referencia (7 columnas x 10 filas)
 const moonLayout = [
-  { c: 4, r: 1, cs: 2, rs: 2 }, // Punta superior derecha (grande)
-  { c: 3, r: 1, cs: 1, rs: 1 }, // Relleno superior interno
-  { c: 3, r: 2, cs: 1, rs: 1 }, 
-  { c: 2, r: 3, cs: 2, rs: 2 }, // Curva superior izquierda (grande)
-  { c: 1, r: 4, cs: 1, rs: 1 }, // Borde exterior izquierdo
-  { c: 4, r: 4, cs: 1, rs: 1 }, // Borde interior
-  { c: 1, r: 5, cs: 2, rs: 2 }, // Vientre de la luna / centro (grande)
-  { c: 3, r: 5, cs: 1, rs: 1 }, // Relleno centro interior
-  { c: 3, r: 6, cs: 1, rs: 1 }, 
-  { c: 2, r: 7, cs: 2, rs: 2 }, // Curva inferior izquierda (grande)
-  { c: 4, r: 8, cs: 1, rs: 1 }, // Borde interior bajo
-  { c: 3, r: 9, cs: 1, rs: 1 }, // Relleno inferior interno
-  { c: 4, r: 9, cs: 2, rs: 2 }, // Punta inferior derecha (grande)
-  { c: 3, r: 10, cs: 1, rs: 1 }
+  // Punta superior
+  { c: 6, r: 1, cs: 1, rs: 1 }, // Cuadro pequeño superior
+  { c: 4, r: 2, cs: 2, rs: 2 }, // Cuadro grande oscuro superior
+  
+  // Curva superior e interior
+  { c: 2, r: 3, cs: 2, rs: 2 }, // Cuadro grande claro (izq)
+  { c: 4, r: 4, cs: 2, rs: 2 }, // Cuadro grande claro (der, bajo el oscuro)
+  { c: 3, r: 5, cs: 1, rs: 1 }, // Conector pequeño
+  
+  // Vientre (la parte más gruesa a la izquierda)
+  { c: 1, r: 5, cs: 2, rs: 2 }, // Cuadro grande oscuro (el más a la izquierda)
+  { c: 3, r: 6, cs: 2, rs: 2 }, // Cuadro grande oscuro central
+  { c: 6, r: 6, cs: 1, rs: 1 }, // Cuadro pequeño flotante interno
+  
+  // Curva inferior
+  { c: 4, r: 8, cs: 1, rs: 1 }, // Conector pequeño
+  { c: 2, r: 8, cs: 2, rs: 2 }, // Cuadro grande oscuro inferior-izq
+  
+  // Base de la luna
+  { c: 6, r: 9, cs: 1, rs: 1 }, // Conector pequeño
+  { c: 4, r: 9, cs: 2, rs: 2 }, // Cuadro grande claro inferior
+  { c: 3, r: 10, cs: 1, rs: 1 }, // Conector pequeño
+  { c: 6, r: 10, cs: 2, rs: 2 }, // Cuadro grande oscuro inferior-der
+  { c: 8, r: 11, cs: 1, rs: 1 }  // Cuadro pequeño de la punta inferior
 ];
 
   return (
@@ -119,13 +129,13 @@ const moonLayout = [
         
         {/* EL TRUCO: aspect-ratio bloqueado para que sean CUADRADOS PERFECTOS */}
               <div 
-        className="grid gap-1 w-[260px] md:w-[320px]" 
-        style={{ 
-          gridTemplateColumns: 'repeat(5, 1fr)', 
-          gridTemplateRows: 'repeat(10, 1fr)',
-          aspectRatio: '5 / 10' // Fundamental para mantener los cuadrados perfectos
-        }}
-      >
+  className="grid gap-1 w-[280px] md:w-[340px]" 
+  style={{ 
+    gridTemplateColumns: 'repeat(8, 1fr)', 
+    gridTemplateRows: 'repeat(11, 1fr)',
+    aspectRatio: '8 / 11' // Mantiene los cuadrados perfectos
+  }}
+>
           {moonLayout.map((block, i) => (
             <div 
               key={i} 
@@ -143,31 +153,6 @@ const moonLayout = [
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Texto de la contraportada */}
-      <div className="flex flex-col items-center justify-center text-center mt-8 md:mt-0 relative">
-        <Star className="absolute top-1/2 -right-12 text-yellow-400 animate-pulse hidden md:block" style={{ animationDelay: '1.5s' }} size={24} fill="currentColor" />
-        
-        <h3 className="text-3xl md:text-4xl font-sans font-bold text-gray-800 tracking-widest uppercase mb-1">
-          I Love You
-        </h3>
-        <span className="text-lg md:text-xl font-serif italic text-gray-500 mb-2">
-          to the
-        </span>
-        <h2 
-          className="text-7xl md:text-8xl font-bold text-gray-900" 
-          style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', letterSpacing: '-0.05em' }} 
-        >
-          moon
-        </h2>
-        <span className="text-lg md:text-xl font-serif italic text-gray-500 mt-2 mb-8">
-          and back
-        </span>
-        <div className="w-16 h-[1px] bg-pink-300 mb-6"></div>
-        <p className="text-4xl text-pink-400" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-          Dome
-        </p>
       </div>
     </section>
   );
