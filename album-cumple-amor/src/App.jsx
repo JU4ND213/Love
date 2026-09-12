@@ -89,23 +89,22 @@ const MoonCollage = ({ fotos }) => {
   if (!fotos || fotos.length === 0) return null;
 
   // Mapa EXTREMADAMENTE PRECISO basado en la imagen de referencia (7 columnas x 10 filas)
-  const moonLayout = [
-    { c: 5, r: 1, cs: 1, rs: 1 }, // Top right small
-    { c: 3, r: 1, cs: 2, rs: 2 }, // Top large
-    { c: 2, r: 2, cs: 1, rs: 1 }, // Upper left small
-    { c: 2, r: 3, cs: 2, rs: 2 }, // Upper mid-left large
-    { c: 4, r: 3, cs: 2, rs: 2 }, // Upper mid-right large
-    { c: 1, r: 4, cs: 1, rs: 1 }, // Mid left outer small
-    { c: 1, r: 5, cs: 2, rs: 2 }, // Mid left large
-    { c: 3, r: 5, cs: 2, rs: 2 }, // Mid center large
-    { c: 5, r: 6, cs: 1, rs: 1 }, // Mid inner small
-    { c: 2, r: 7, cs: 1, rs: 1 }, // Bottom left small
-    { c: 3, r: 7, cs: 2, rs: 2 }, // Bottom mid-left large
-    { c: 5, r: 7, cs: 2, rs: 2 }, // Bottom mid-right large
-    { c: 7, r: 8, cs: 1, rs: 1 }, // Bottom right small
-    { c: 3, r: 9, cs: 1, rs: 1 }, // Bottom lowest small
-    { c: 4, r: 9, cs: 2, rs: 2 }, // Bottom lowest large
-  ];
+const moonLayout = [
+  { c: 4, r: 1, cs: 2, rs: 2 }, // Punta superior derecha (grande)
+  { c: 3, r: 1, cs: 1, rs: 1 }, // Relleno superior interno
+  { c: 3, r: 2, cs: 1, rs: 1 }, 
+  { c: 2, r: 3, cs: 2, rs: 2 }, // Curva superior izquierda (grande)
+  { c: 1, r: 4, cs: 1, rs: 1 }, // Borde exterior izquierdo
+  { c: 4, r: 4, cs: 1, rs: 1 }, // Borde interior
+  { c: 1, r: 5, cs: 2, rs: 2 }, // Vientre de la luna / centro (grande)
+  { c: 3, r: 5, cs: 1, rs: 1 }, // Relleno centro interior
+  { c: 3, r: 6, cs: 1, rs: 1 }, 
+  { c: 2, r: 7, cs: 2, rs: 2 }, // Curva inferior izquierda (grande)
+  { c: 4, r: 8, cs: 1, rs: 1 }, // Borde interior bajo
+  { c: 3, r: 9, cs: 1, rs: 1 }, // Relleno inferior interno
+  { c: 4, r: 9, cs: 2, rs: 2 }, // Punta inferior derecha (grande)
+  { c: 3, r: 10, cs: 1, rs: 1 }
+];
 
   return (
     <section className="mt-32 pt-20 border-t border-pink-100 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 relative overflow-hidden">
@@ -119,14 +118,14 @@ const MoonCollage = ({ fotos }) => {
         <Star className="absolute bottom-10 -right-6 text-yellow-400 animate-pulse" style={{ animationDelay: '0.4s' }} size={26} fill="currentColor" />
         
         {/* EL TRUCO: aspect-ratio bloqueado para que sean CUADRADOS PERFECTOS */}
-        <div 
-          className="grid gap-1 w-[260px] md:w-[320px]" 
-          style={{ 
-            gridTemplateColumns: 'repeat(7, 1fr)', 
-            gridTemplateRows: 'repeat(10, 1fr)',
-            aspectRatio: '7 / 10' // Obliga a que la altura sea proporcional al ancho
-          }}
-        >
+              <div 
+        className="grid gap-1 w-[260px] md:w-[320px]" 
+        style={{ 
+          gridTemplateColumns: 'repeat(5, 1fr)', 
+          gridTemplateRows: 'repeat(10, 1fr)',
+          aspectRatio: '5 / 10' // Fundamental para mantener los cuadrados perfectos
+        }}
+      >
           {moonLayout.map((block, i) => (
             <div 
               key={i} 
