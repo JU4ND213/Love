@@ -187,8 +187,8 @@ export default function App() {
   const babyPinkStroke = '-1px -1px 0 #f9a8d4, 1px -1px 0 #f9a8d4, -1px 1px 0 #f9a8d4, 1px 1px 0 #f9a8d4, 0px 4px 15px rgba(249,168,212,0.6)';
 
   const cuadrosInfo = [
-    { id: 1, titulo: 'Nuestros Inicios', nota: 'Como empezó esta hermosa aventura...', carpeta: 'cuadro1' },
-    { id: 2, titulo: 'Viajes Inolvidables', nota: 'Conociendo el mundo de tu mano.', carpeta: 'cuadro2' },
+    { id: 1, titulo: 'Nuestros Inicios', nota: 'Como empezó esta hermosa historia...', carpeta: 'cuadro1' },
+    { id: 2, titulo: 'Nuestras Saliditas', nota: 'Conociendo y reconociendo nuevos lugares', carpeta: 'cuadro2' },
     { id: 3, titulo: 'Momentos Divertidos', nota: 'Risas que me dan vida y días perfectos.', carpeta: 'cuadro3' },
   ];
 
@@ -374,7 +374,7 @@ export default function App() {
                     style={{ textShadow: babyPinkStroke }}
                   >
                     <span>Te amoooo</span>
-                    <span>19/09.......</span>
+                    <span>19/09/2026</span>
                   </div>
                 </div>
               </motion.div>
