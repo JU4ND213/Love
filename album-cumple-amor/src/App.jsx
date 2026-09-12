@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Heart, Music, Pause, Play, Sparkles, SkipForward, X, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Heart, Music, Pause, Play, Sparkles, SkipForward, X, ArrowLeft, ArrowRight, Star } from 'lucide-react';
 
 const playlist = [
   '/music/Justin Bieber - All Around The World (Lyric Video) ft. Ludacris - JustinBieberVEVO.mp3',
-  '/music/Outlander  Season 1 - Official Opening Credits _ Intro - ★ TV-Series - Opening Credits _ Intro ★.mp3',
+  '/music/Outlander  Season 1.mp3',
   '/music/Zoé - Luna (MTV Unplugged) - ZoeVEVO.mp3',
   '/music/Zoé - Soñé (MTV Unplugged) - ZoeVEVO.mp3'
 ];
@@ -84,16 +84,106 @@ const CuadroGaleria = ({ titulo, nota, index, carpeta, onZoom }) => {
   );
 };
 
+// Contraportada: collage de fotos en forma de luna
+const MoonCollage = ({ fotos }) => {
+  if (!fotos || fotos.length === 0) return null;
+
+  // Mapa EXTREMADAMENTE PRECISO basado en la imagen de referencia (7 columnas x 10 filas)
+  const moonLayout = [
+    { c: 5, r: 1, cs: 1, rs: 1 }, // Top right small
+    { c: 3, r: 1, cs: 2, rs: 2 }, // Top large
+    { c: 2, r: 2, cs: 1, rs: 1 }, // Upper left small
+    { c: 2, r: 3, cs: 2, rs: 2 }, // Upper mid-left large
+    { c: 4, r: 3, cs: 2, rs: 2 }, // Upper mid-right large
+    { c: 1, r: 4, cs: 1, rs: 1 }, // Mid left outer small
+    { c: 1, r: 5, cs: 2, rs: 2 }, // Mid left large
+    { c: 3, r: 5, cs: 2, rs: 2 }, // Mid center large
+    { c: 5, r: 6, cs: 1, rs: 1 }, // Mid inner small
+    { c: 2, r: 7, cs: 1, rs: 1 }, // Bottom left small
+    { c: 3, r: 7, cs: 2, rs: 2 }, // Bottom mid-left large
+    { c: 5, r: 7, cs: 2, rs: 2 }, // Bottom mid-right large
+    { c: 7, r: 8, cs: 1, rs: 1 }, // Bottom right small
+    { c: 3, r: 9, cs: 1, rs: 1 }, // Bottom lowest small
+    { c: 4, r: 9, cs: 2, rs: 2 }, // Bottom lowest large
+  ];
+
+  return (
+    <section className="mt-32 pt-20 border-t border-pink-100 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 relative overflow-hidden">
+      
+      {/* Contenedor de la luna */}
+      <div className="relative">
+        {/* Estrellas decorativas mapeadas a la referencia */}
+        <Star className="absolute -top-6 -left-6 text-yellow-400 animate-pulse" size={24} fill="currentColor" />
+        <Star className="absolute -top-2 -right-8 text-yellow-400 animate-pulse" style={{ animationDelay: '0.7s' }} size={28} fill="currentColor" />
+        <Star className="absolute bottom-16 -left-10 text-yellow-400 animate-pulse" style={{ animationDelay: '1.2s' }} size={22} fill="currentColor" />
+        <Star className="absolute bottom-10 -right-6 text-yellow-400 animate-pulse" style={{ animationDelay: '0.4s' }} size={26} fill="currentColor" />
+        
+        {/* EL TRUCO: aspect-ratio bloqueado para que sean CUADRADOS PERFECTOS */}
+        <div 
+          className="grid gap-1 w-[260px] md:w-[320px]" 
+          style={{ 
+            gridTemplateColumns: 'repeat(7, 1fr)', 
+            gridTemplateRows: 'repeat(10, 1fr)',
+            aspectRatio: '7 / 10' // Obliga a que la altura sea proporcional al ancho
+          }}
+        >
+          {moonLayout.map((block, i) => (
+            <div 
+              key={i} 
+              className="bg-pink-100 overflow-hidden shadow-sm"
+              style={{ 
+                gridColumn: `${block.c} / span ${block.cs}`, 
+                gridRow: `${block.r} / span ${block.rs}` 
+              }}
+            >
+              <img 
+                src={fotos[i % fotos.length]} 
+                alt="Fragmento de la luna" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Texto de la contraportada */}
+      <div className="flex flex-col items-center justify-center text-center mt-8 md:mt-0 relative">
+        <Star className="absolute top-1/2 -right-12 text-yellow-400 animate-pulse hidden md:block" style={{ animationDelay: '1.5s' }} size={24} fill="currentColor" />
+        
+        <h3 className="text-3xl md:text-4xl font-sans font-bold text-gray-800 tracking-widest uppercase mb-1">
+          I Love You
+        </h3>
+        <span className="text-lg md:text-xl font-serif italic text-gray-500 mb-2">
+          to the
+        </span>
+        <h2 
+          className="text-7xl md:text-8xl font-bold text-gray-900" 
+          style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', letterSpacing: '-0.05em' }} 
+        >
+          moon
+        </h2>
+        <span className="text-lg md:text-xl font-serif italic text-gray-500 mt-2 mb-8">
+          and back
+        </span>
+        <div className="w-16 h-[1px] bg-pink-300 mb-6"></div>
+        <p className="text-4xl text-pink-400" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+          Dome
+        </p>
+      </div>
+    </section>
+  );
+};
+
 export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [lightbox, setLightbox] = useState(null); 
   const [portadaUrl, setPortadaUrl] = useState('');
+  const [todasLasFotos, setTodasLasFotos] = useState([]); 
   
   const [isRevealed, setIsRevealed] = useState(false); 
   const audioRef = useRef(null);
 
-  // Contorno Baby Pink suave para los textos de la portada
   const babyPinkStroke = '-1px -1px 0 #f9a8d4, 1px -1px 0 #f9a8d4, -1px 1px 0 #f9a8d4, 1px 1px 0 #f9a8d4, 0px 4px 15px rgba(249,168,212,0.6)';
 
   const cuadrosInfo = [
@@ -108,6 +198,12 @@ export default function App() {
     if (paths.length > 0) {
       setPortadaUrl(paths[0].replace('/public', ''));
     }
+  }, []);
+
+  useEffect(() => {
+    const modulosTodasLasFotos = import.meta.glob('/public/images/cuadro*/*.{jpeg,jpg,png,webp}');
+    const pathsTodasLasFotos = Object.keys(modulosTodasLasFotos).map(path => path.replace('/public', ''));
+    setTodasLasFotos(pathsTodasLasFotos);
   }, []);
 
   const toggleMusic = () => {
@@ -147,7 +243,6 @@ export default function App() {
     <div className="h-screen w-full bg-[#FCF9F9] text-gray-700 font-serif selection:bg-pink-100 overflow-hidden relative">
       <audio ref={audioRef} src={playlist[currentSongIndex]} onEnded={nextSong} />
 
-      {/* PLIEGUE PARA VOLVER A LA PORTADA (Esquina Superior Izquierda) */}
       <AnimatePresence>
         {isRevealed && (
           <motion.div 
@@ -190,7 +285,6 @@ export default function App() {
               <X size={24} />
             </button>
 
-            {/* Pliegue Anterior (Pantalla Completa) */}
             <div onClick={prevLightboxFoto} className="absolute bottom-0 left-0 w-24 h-24 md:w-32 md:h-32 cursor-pointer group/prev z-50">
               <div className="absolute bottom-0 left-0 w-full h-full bg-pink-50/95 backdrop-blur-md shadow-[5px_-5px_15px_rgba(244,114,182,0.3)] transition-all duration-300 group-hover/prev:w-28 group-hover/prev:h-28 md:group-hover/prev:w-36 md:group-hover/prev:h-36" style={{ clipPath: 'polygon(0 0, 100% 100%, 0 100%)' }}></div>
               <ArrowLeft size={32} className="absolute bottom-4 left-4 text-pink-400 transform rotate-45 group-hover/prev:-translate-x-1 group-hover/prev:-translate-y-1 transition-transform" />
@@ -210,7 +304,6 @@ export default function App() {
               />
             </AnimatePresence>
 
-            {/* Pliegue Siguiente (Pantalla Completa) */}
             <div onClick={nextLightboxFoto} className="absolute bottom-0 right-0 w-24 h-24 md:w-32 md:h-32 cursor-pointer group/next z-50">
               <div className="absolute bottom-0 right-0 w-full h-full bg-pink-50/95 backdrop-blur-md shadow-[-5px_-5px_15px_rgba(244,114,182,0.3)] transition-all duration-300 group-hover/next:w-28 group-hover/next:h-28 md:group-hover/next:w-36 md:group-hover/next:h-36" style={{ clipPath: 'polygon(100% 0, 0 100%, 100% 100%)' }}></div>
               <ArrowRight size={32} className="absolute bottom-4 right-4 text-pink-400 transform -rotate-45 group-hover/next:translate-x-1 group-hover/next:-translate-y-1 transition-transform" />
@@ -286,7 +379,6 @@ export default function App() {
                 </div>
               </motion.div>
 
-              {/* PLIEGUE PARA ABRIR LA REVISTA (Esquina Inferior Derecha) */}
               <div 
                 onClick={() => setIsRevealed(true)}
                 className="absolute bottom-0 right-0 w-32 h-32 md:w-40 md:h-40 cursor-pointer group z-50 pointer-events-auto"
@@ -302,7 +394,6 @@ export default function App() {
                    <ArrowRight size={28} className="text-pink-400 transform -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500" />
                 </div>
               </div>
-
             </motion.header>
           )}
         </AnimatePresence>
@@ -341,10 +432,15 @@ export default function App() {
             </p>
             <button 
               onClick={lanzarConfeti} 
-              className="bg-pink-300 text-white font-sans px-8 py-4 uppercase tracking-[0.15em] text-xs font-bold hover:bg-pink-400 hover:shadow-lg hover:shadow-pink-400/30 transition-all duration-300 transform active:scale-95 flex items-center gap-3 mx-auto relative z-10 rounded-full"            >
-              <Sparkles size={18} /> ¡Sorpresa!
+              className="bg-pink-300 text-white font-sans px-8 py-4 uppercase tracking-[0.15em] text-xs font-bold hover:bg-pink-400 hover:shadow-lg hover:shadow-pink-400/30 transition-all duration-300 transform active:scale-95 flex items-center gap-3 mx-auto relative z-10 rounded-full"            
+            >
+              <Sparkles size={18} /> Sorpresa
             </button>
           </section>
+
+          {/* Contraportada: collage en forma de luna */}
+          <MoonCollage fotos={todasLasFotos} />
+
         </main>
       </div>
     </div>
