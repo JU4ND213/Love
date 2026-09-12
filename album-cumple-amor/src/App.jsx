@@ -84,46 +84,51 @@ const CuadroGaleria = ({ titulo, nota, index, carpeta, onZoom }) => {
   );
 };
 
-// Contraportada: Pizarra interactiva para armar la luna manualmente
+// Contraportada: Pizarra interactiva para armar la luna (o cualquier figura) manualmente
 const MoonCollage = ({ fotos }) => {
+  // Referencia al contenedor de la pizarra para limitar el movimiento de las fotos
+  const constraintsRef = useRef(null);
+
   if (!fotos || fotos.length === 0) return null;
 
   return (
     <section className="mt-32 pt-20 border-t border-pink-100 flex flex-col items-center justify-center relative overflow-hidden">
       
-      <div className="text-center mb-8">
-        <h3 className="text-2xl md:text-3xl font-bold text-gray-700 mb-2">¡Collage para hacer figuritas!</h3>
-        <p className="text-gray-500 italic text-sm">Arrastra las fotos libremente por la pizarra para darle forma a lo que más te guste mi amor.</p>
+      <div className="text-center mb-8 px-4">
+        <h3 className="text-2xl md:text-3xl font-bold text-gray-700 mb-2">¡Nuestra Pizarra de Recuerdos!</h3>
+        <p className="text-gray-500 italic text-sm">Arrastra las fotos libremente por la pizarra para darle forma a lo que más te guste, mi amor.</p>
       </div>
 
-      {/* Pizarra / Canvas */}
-      <div className="relative w-full max-w-4xl h-[600px] bg-white border-2 border-dashed border-pink-200 rounded-3xl shadow-inner overflow-hidden">
-        
+      {/* Pizarra / Canvas (Añadimos ref={constraintsRef} para los límites) */}
+      <div 
+        ref={constraintsRef} 
+        // En móviles será de 400px de alto, en PC de 600px. Touch-none previene scroll al arrastrar.
+        className="relative w-full max-w-4xl h-[450px] md:h-[600px] bg-white border-2 border-dashed border-pink-200 rounded-3xl shadow-inner overflow-hidden touch-none"
+      >
         <Star className="absolute top-6 left-6 text-yellow-400 animate-pulse" size={24} fill="currentColor" />
         <Star className="absolute top-12 right-12 text-yellow-400 animate-pulse" style={{ animationDelay: '0.7s' }} size={28} fill="currentColor" />
         <Star className="absolute bottom-16 left-10 text-yellow-400 animate-pulse" style={{ animationDelay: '1.2s' }} size={22} fill="currentColor" />
         
-        {/* Renderizamos las fotos como elementos arrastrables */}
         {fotos.map((foto, i) => {
-          // Posiciones iniciales aleatorias al lado izquierdo para que ella las acomode
-          const randomX = Math.floor(Math.random() * 100) + 20; 
-          const randomY = Math.floor(Math.random() * 400) + 20;
-          const randomRotate = Math.floor(Math.random() * 20) - 10;
+          // Posiciones iniciales aleatorias, asegurando que queden dentro de los bordes del móvil
+          const randomX = Math.floor(Math.random() * 80) + 10; // De 10px a 90px
+          const randomY = Math.floor(Math.random() * 250) + 20; // De 20px a 270px
+          const randomRotate = Math.floor(Math.random() * 30) - 15;
 
           return (
             <motion.div 
               key={i}
-              drag // ¡Esta es la magia! Hace que el elemento se pueda arrastrar
-              dragMomentum={false} // Evita que la foto salga "volando" al soltarla
-              whileDrag={{ scale: 1.1, zIndex: 50 }} // Se hace más grande al agarrarla
+              drag 
+              dragConstraints={constraintsRef} // ¡Esto evita que las fotos salgan de la pizarra!
+              dragMomentum={false} 
+              whileDrag={{ scale: 1.15, zIndex: 50, boxShadow: "0px 10px 20px rgba(0,0,0,0.2)" }} 
               initial={{ x: randomX, y: randomY, rotate: randomRotate }}
-              className="absolute w-24 h-24 md:w-32 md:h-32 bg-white p-2 pb-6 shadow-md rounded-sm cursor-grab active:cursor-grabbing"
-              style={{ touchAction: 'none' }} // Importante para que funcione bien en celulares
+              // Tamaño de foto ajustado: w-20 en móvil, w-32 en PC
+              className="absolute w-20 h-20 md:w-32 md:h-32 bg-white p-1.5 md:p-2 pb-4 md:pb-6 shadow-md rounded-sm cursor-grab active:cursor-grabbing"
             >
               <img 
                 src={foto} 
                 alt="Fragmento" 
-                // pointer-events-none es crucial para que el navegador no intente descargar la imagen al arrastrarla
                 className="w-full h-full object-cover pointer-events-none" 
               />
             </motion.div>
